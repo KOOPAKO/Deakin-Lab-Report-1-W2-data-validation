@@ -55,9 +55,10 @@ def check_time(var):
 
 def check_RowID():
     # check rowID values are unique integers (will also find missing rows)
-    df = pd.read_csv(filePath) # reload csv
+    df = pd.read_csv(filePath)  # reload csv
+    previousID = 0 # The ID of the previous row, checking for missing rows
 
-    errors = {"valueError":{}, "duplicate":{}}
+    errors = {"valueError":{}, "duplicate":{}, "missingRows": {}}
     testList = []
     # find errors
     for index, val in enumerate(df['rowID']):
@@ -66,9 +67,15 @@ def check_RowID():
             errors["duplicate"][i] = val
         if not check_int(val):
             errors["valueError"][i] = val
+        else:
+            if (int(val) - previousID > 2000):
+                errors["missingRows"][i] = val
+            previousID = int(val)
+
         testList.append(val)
+
     # case if no errors
-    if len(errors["duplicate"]) == 0 and len(errors["valueError"]) == 0:
+    if len(errors["duplicate"]) == 0 and len(errors["valueError"]) == 0 and len(errors["missingRows"]) == 0:
         return
     else:
         # print value errors
@@ -76,11 +83,21 @@ def check_RowID():
             print("RowID Value errors:")
             for error in errors["valueError"]:
                 print(f"Row: {error}, Value: {errors['valueError'][error]}")
+            print()
         # print duplicate value errors
         if len(errors["duplicate"]) > 0:
             print("RowID Value errors:")
             for error in errors["duplicate"]:
                 print(f"Row: {error}, Value: {errors['duplicate'][error]}")
+            print()
+            
+        # print duplicate value errors
+        if len(errors["missingRows"]) > 0:
+            print("Missing Rows: ")
+            for error in errors["missingRows"]:
+                print(f"\tRow: {error}, Value: {errors['missingRows'][error]}")
+            print()
+
         print("Please first fix these errors")
         input("Then press Enter to continue...")
         check_RowID() # Ensure errors are fixed before continuing
