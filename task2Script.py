@@ -110,15 +110,19 @@ def check_stamp():
 def check_datetime():
     # check datetime values are consecutive time values in correct format
     df = pd.read_csv(filePath) # reload csv
-    errors = {"valueError":{}}
+    errors = {"valueError":{},"duplicate":{}}
+    testList = []
     # find errors
     for index, val in enumerate(df['datetime']):
         i = index + 2 # nessesary because index starts from 0 refering to Spreadsheet software row 2, meaning that the indexes here are 2 less than in the spreadsheet software
         val = val.lstrip(' ') # remove white space at beggining
         if not check_time(str(val)):
             errors["valueError"][i] = val
+        if val in testList:
+            errors["duplicate"][i] = val
+        testList.append(val)
     # case if no errors
-    if len(errors["valueError"]) == 0:
+    if len(errors["valueError"]) == 0 and len(errors["duplicate"]) == 0:
         return
     else:
         # print value errors
@@ -126,6 +130,11 @@ def check_datetime():
             print("datetime Value errors:")
             for error in errors["valueError"]:
                 print(f"Row: {error}, Value: {errors['valueError'][error]}")
+        # print duplicate errors
+        if len(errors["duplicate"]) > 0:
+            print("datetime Duplicate errors:")
+            for error in errors["duplicate"]:
+                print(f"Row: {error}, Value: {errors['duplicate'][error]}")
         print("Please first fix these errors")
         input("Then press Enter to continue...")
         check_datetime() # Ensure errors are fixed before continuing
