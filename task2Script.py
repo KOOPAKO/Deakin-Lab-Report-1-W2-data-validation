@@ -7,22 +7,22 @@ def main():
     # ensure RowID's are consistent
     print("Checking column: RowID")
     check_RowID()
-    print("Done")
+    print("__________________________________")
 
     # ensure stamp values are consistent
     print("Checking column: stamp")
     check_stamp()
-    print("Done")
+    print("__________________________________")
 
     # ensure datetime values are consistent
     print("Checking column: datetime")
     check_datetime()
-    print("Done")
+    print("__________________________________")
 
     # ensure hum values are consistent
     print("Checking column: hum")
     check_hum()
-    print("Done")
+    print("__________________________________")
 
 
 # function to check if value is decimal
@@ -82,25 +82,21 @@ def check_RowID():
         if len(errors["valueError"]) > 0:
             print("RowID Value errors:")
             for error in errors["valueError"]:
-                print(f"Row: {error}, Value: {errors['valueError'][error]}")
+                print(f"\tRow: {error}, Value: {errors['valueError'][error]}")
             print()
         # print duplicate value errors
         if len(errors["duplicate"]) > 0:
             print("RowID Value errors:")
             for error in errors["duplicate"]:
-                print(f"Row: {error}, Value: {errors['duplicate'][error]}")
+                print(f"\tRow: {error}, Value: {errors['duplicate'][error]}")
             print()
-            
+
         # print duplicate value errors
         if len(errors["missingRows"]) > 0:
             print("Missing Rows: ")
             for error in errors["missingRows"]:
                 print(f"\tRow: {error}, Value: {errors['missingRows'][error]}")
             print()
-
-        print("Please first fix these errors")
-        input("Then press Enter to continue...")
-        check_RowID() # Ensure errors are fixed before continuing
 
 def check_stamp():
     # check stamp values are all integers
@@ -119,10 +115,8 @@ def check_stamp():
         if len(errors["valueError"]) > 0:
             print("stamp Value errors:")
             for error in errors["valueError"]:
-                print(f"Row: {error}, Value: {errors['valueError'][error]}")
-        print("Please first fix these errors")
-        input("Then press Enter to continue...")
-        check_stamp() # Ensure errors are fixed before continuing
+                print(f"\tRow: {error}, Value: {errors['valueError'][error]}")
+            print()
 
 def check_datetime():
     # check datetime values are consecutive time values in correct format
@@ -146,15 +140,14 @@ def check_datetime():
         if len(errors["valueError"]) > 0:
             print("datetime Value errors:")
             for error in errors["valueError"]:
-                print(f"Row: {error}, Value: {errors['valueError'][error]}")
+                print(f"\tRow: {error}, Value: {errors['valueError'][error]}")
+            print()
         # print duplicate errors
         if len(errors["duplicate"]) > 0:
             print("datetime Duplicate errors:")
             for error in errors["duplicate"]:
-                print(f"Row: {error}, Value: {errors['duplicate'][error]}")
-        print("Please first fix these errors")
-        input("Then press Enter to continue...")
-        check_datetime() # Ensure errors are fixed before continuing
+                print(f"\tRow: {error}, Value: {errors['duplicate'][error]}")
+            print()
 
 def check_hum():
     #  check hum vales are decimals (1dp)
@@ -173,9 +166,7 @@ def check_hum():
         if len(errors["valueError"]) > 0:
             print("hum Value errors:")
             for error in errors["valueError"]:
-                print(f"Row: {error}, Value: {errors['valueError'][error]}")
-        print("Please first fix these errors")
-        input("Then press Enter to continue...")
-        check_hum() # Ensure errors are fixed before continuing
+                print(f"\tRow: {error}, Value: {errors['valueError'][error]}")
+            print()
 
 main() # begin validation
