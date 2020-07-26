@@ -1,5 +1,6 @@
 import pandas as pd
 from datetime import datetime
+import time
 
 filePath = './Humidity Dataset.csv'
 
@@ -52,6 +53,14 @@ def check_time(var):
     except ValueError:
         return False
     return True
+
+def check_timestamp(date, timestamp): #! Checks whether the date converted to a timestamp is equal to the matching timestamp value
+    if (not check_int(timestamp)): # If the timestamp is misformatted, can't compare
+        return True
+
+    dateTimestamp = time.mktime(time.strptime(date, '%Y/%m/%d %H:%M:%S')) # Converts the timestamp string into a time object and then into a timestamp
+    
+    return dateTimestamp != float(timestamp) # If they aren't equal, return False meaning error
 
 def check_RowID():
     # check rowID values are unique integers (will also find missing rows)
@@ -121,7 +130,7 @@ def check_stamp():
 def check_datetime():
     # check datetime values are consecutive time values in correct format
     df = pd.read_csv(filePath) # reload csv
-    errors = {"valueError":{},"duplicate":{}}
+    errors = {"valueError":{},"duplicate":{}, "inconsistencies": {}}
     testList = []
     # find errors
     for index, val in enumerate(df['datetime']):
@@ -129,6 +138,8 @@ def check_datetime():
         val = val.lstrip(' ') # remove white space at beggining
         if not check_time(str(val)):
             errors["valueError"][i] = val
+        elif not check_timestamp(str(val), df['stamp'][index]): # If the date is not misformatted, we can compare it with the timestamp
+            errors["inconsistencies"][i] = val
         if val in testList:
             errors["duplicate"][i] = val
         testList.append(val)
@@ -147,6 +158,13 @@ def check_datetime():
             print("datetime Duplicate errors:")
             for error in errors["duplicate"]:
                 print(f"\tRow: {error}, Value: {errors['duplicate'][error]}")
+            print()
+
+        # print inconsistency errors
+        if len(errors["inconsistencies"]) > 0:
+            print("datetime Inconsistency errors:")
+            for error in errors["inconsistencies"]:
+                print(f"\tRow: {error}, Value: {errors['inconsistencies'][error]}")
             print()
 
 def check_hum():
