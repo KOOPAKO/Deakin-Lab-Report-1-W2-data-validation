@@ -7,22 +7,22 @@ def main():
     # ensure RowID's are consistent
     print("Checking column: RowID")
     check_RowID()
-    print("Done")
+    print("_________________________________________________")
 
     # ensure stamp values are consistent
     print("Checking column: stamp")
     check_stamp()
-    print("Done")
+    print("_________________________________________________")
 
     # ensure datetime values are consistent
     print("Checking column: datetime")
     check_datetime()
-    print("Done")
+    print("_________________________________________________")
 
     # ensure hum values are consistent
     print("Checking column: hum")
     check_hum()
-    print("Done")
+    print("_________________________________________________")
 
 
 # function to check if value is decimal
@@ -81,9 +81,6 @@ def check_RowID():
             print("RowID Value errors:")
             for error in errors["duplicate"]:
                 print(f"Row: {error}, Value: {errors['duplicate'][error]}")
-        print("Please first fix these errors")
-        input("Then press Enter to continue...")
-        check_RowID() # Ensure errors are fixed before continuing
 
 def check_stamp():
     # check stamp values are all integers
@@ -103,9 +100,6 @@ def check_stamp():
             print("stamp Value errors:")
             for error in errors["valueError"]:
                 print(f"Row: {error}, Value: {errors['valueError'][error]}")
-        print("Please first fix these errors")
-        input("Then press Enter to continue...")
-        check_stamp() # Ensure errors are fixed before continuing
 
 def check_datetime():
     # check datetime values are consecutive time values in correct format
@@ -135,9 +129,6 @@ def check_datetime():
             print("datetime Duplicate errors:")
             for error in errors["duplicate"]:
                 print(f"Row: {error}, Value: {errors['duplicate'][error]}")
-        print("Please first fix these errors")
-        input("Then press Enter to continue...")
-        check_datetime() # Ensure errors are fixed before continuing
 
 def check_hum():
     #  check hum vales are decimals (1dp)
@@ -157,8 +148,7 @@ def check_hum():
             print("hum Value errors:")
             for error in errors["valueError"]:
                 print(f"Row: {error}, Value: {errors['valueError'][error]}")
-        print("Please first fix these errors")
-        input("Then press Enter to continue...")
-        check_hum() # Ensure errors are fixed before continuing
+
+
 
 main() # begin validation
